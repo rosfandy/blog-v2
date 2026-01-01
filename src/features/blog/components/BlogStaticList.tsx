@@ -1,22 +1,18 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { gsap } from "gsap";
 import { MdCampaign } from "react-icons/md";
 import { Blog } from "../types/blog.type";
+import { slugify } from "@/utils/slugify";
 
 const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
-    const [showContent, setShowContent] = useState(false);
     const sectionRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        setShowContent(true);
-    }, []);
-
-    useEffect(() => {
-        if (showContent && blogs && sectionRef.current) {
+        if (blogs && sectionRef.current) {
             const tl = gsap.timeline();
 
             // Animate header
@@ -48,56 +44,26 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
                 );
             }
         }
-    }, [blogs, showContent]);
-
-    // Initial state: hide elements sebelum animasi
-    if (!showContent) {
-        return (
-            <section ref={sectionRef} className="mb-24 py-12 md:px-48 px-8">
-                <div ref={headerRef} style={{ opacity: 0 }} className="flex flex-col md:flex-row items-baseline gap-4 mb-8 border-b-2 border-secondary dark:border-red-400 pb-4">
-                    <MdCampaign size={42} />
-                    <h2 className="font-display text-5xl uppercase text-secondary dark:text-red-400">Blog</h2>
-                    <div className="flex-grow hidden md:block border-t border-secondary dark:border-red-400 h-px self-center ml-4"></div>
-                </div>
-                <div className="space-y-16">
-                    {blogs?.map((blog, index) => (
-                        <div key={blog.id} className="blog-item" style={{ opacity: 0 }}>
-                            <div className="flex flex-col md:flex-row justify-between text-secondary dark:text-red-400 text-sm font-bold uppercase mb-2">
-                                <span className={`bg-secondary text-white dark:bg-red-400 dark:text-black px-2 py-0.5 transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} inline-block`}>
-                                    {blog.category || 'General'}
-                                </span>
-                                <span>{new Date(blog.created_at).toLocaleDateString('en-US', {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}</span>
-                            </div>
-                            <h3 className="font-display text-3xl md:text-4xl text-secondary dark:text-red-400 mb-4 group-hover:underline decoration-4 underline-offset-4 decoration-secondary">
-                                {blog.title}
-                            </h3>
-                            <p className="text-lg leading-relaxed mb-6">
-                                {blog.description || 'No description available.'}
-                            </p>
-                            <Link href={`/blog/${blog.id}`} className="inline-block bg-black text-white px-6 py-2 rounded-full font-bold text-sm uppercase hover:bg-secondary transition-colors">
-                                Read More
-                            </Link>
-                        </div>
-                    ))}
-                </div>
-            </section>
-        );
-    }
+    }, [blogs]);
 
     return (
         <section ref={sectionRef} className="mb-24 py-12 md:px-48 px-8">
-            <div ref={headerRef} className="flex flex-col md:flex-row items-baseline gap-4 mb-8 border-b-2 border-secondary dark:border-red-400 pb-4">
+            <div 
+                ref={headerRef} 
+                className="flex flex-col md:flex-row items-baseline gap-4 mb-8 border-b-2 border-secondary dark:border-red-400 pb-4"
+                style={{ opacity: 0 }}
+            >
                 <MdCampaign size={42} />
                 <h2 className="font-display text-5xl uppercase text-secondary dark:text-red-400">Blog</h2>
                 <div className="flex-grow hidden md:block border-t border-secondary dark:border-red-400 h-px self-center ml-4"></div>
             </div>
             <div className="space-y-16">
                 {blogs?.map((blog, index) => (
-                    <div key={blog.id} className="blog-item group">
+                    <div 
+                        key={blog.id} 
+                        className="blog-item group"
+                        style={{ opacity: 0 }}
+                    >
                         <div className="flex flex-col md:flex-row justify-between text-secondary dark:text-red-400 text-sm font-bold uppercase mb-2">
                             <span className={`bg-secondary text-white dark:bg-red-400 dark:text-black px-2 py-0.5 transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} inline-block`}>
                                 {blog.category || 'General'}
@@ -114,8 +80,11 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
                         <p className="text-lg leading-relaxed mb-6">
                             {blog.description || 'No description available.'}
                         </p>
-                        <Link href={`/blog/${blog.id}`} className="inline-block bg-black text-white px-6 py-2 rounded-full font-bold text-sm uppercase hover:bg-secondary transition-colors">
-                            Read More
+                        <Link
+                            href={`/blog/${slugify(blog.title)}-${blog.id}`}
+                            className="inline-block bg-black text-white px-6 py-2 rounded-full font-bold text-sm uppercase hover:bg-secondary transition-colors"
+                        >
+                            Read more
                         </Link>
                     </div>
                 ))}
