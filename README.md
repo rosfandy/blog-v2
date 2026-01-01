@@ -1,0 +1,133 @@
+# Portfolio Website
+
+A modern portfolio website with blog functionality, built using Next.js.
+
+## 📋 Overview
+
+This is a full-stack web application featuring:
+- **Blog System** with rich text editing capabilities
+- **User Authentication** and authorization
+- **Admin Dashboard** for content management
+- **Responsive Design** with dark mode support
+- **SEO Optimized** pages
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS v4
+- **Backend**: Supabase (Auth, Database, Storage)
+- **Animations**: GSAP
+- **State Management**: React Query (tanstack)
+
+## 📁 Project Structure
+
+```
+portfolio/
+├── src/
+│   ├── app/                          # Next.js App Router
+│   │   ├── auth/                     # Authentication pages (login)
+│   │   ├── blog/                     # Blog pages ([id], page.tsx)
+│   │   ├── dashboard/                # Admin dashboard pages
+│   │   │   ├── analytics/            # Analytics page
+│   │   │   ├── blogs/                # Blog management
+│   │   │   ├── comments/             # Comments management
+│   │   │   ├── media/                # Media library
+│   │   │   └── settings/             # Site settings
+│   │   ├── globals.css               # Global styles
+│   │   ├── layout.tsx                # Root layout
+│   │   └── page.tsx                  # Homepage
+│   ├── components/                   # Reusable UI components
+│   │   ├── fragments/                # Page sections (Header, Sidebar, etc.)
+│   │   ├── layouts/                  # Layout components
+│   │   ├── provider/                 # Context providers
+│   │   ├── ui/                       # Basic UI components
+│   │   └── index.ts                  # Component exports
+│   ├── config/                       # Configuration files
+│   │   └── supabase.ts               # Supabase client setup
+│   ├── features/                     # Feature-based modules
+│   │   ├── auth/                     # Authentication logic
+│   │   ├── blog/                     # Blog functionality
+│   │   │   ├── components/           # Blog-specific components
+│   │   │   │   ├── BlogStaticReader.tsx
+│   │   │   │   ├── Comments.tsx
+│   │   │   │   ├── RelatedPosts.tsx
+│   │   │   │   └── blogreader.css
+│   │   │   └── hook/                 # Blog hooks (useBlog.ts)
+│   │   ├── comments/                 # Comments feature
+│   │   ├── dashboard/                # Dashboard feature
+│   │   ├── editor/                   # Rich text editor
+│   │   └── media/                    # Media management
+│   ├── hooks/                        # Custom React hooks
+├── public/                           # Static assets (images, icons)
+├── package.json                      # Dependencies and scripts
+├── next.config.ts                    # Next.js configuration
+├── tailwind.config.ts                # Tailwind CSS config
+├── tsconfig.json                     # TypeScript config
+├── eslint.config.mjs                 # ESLint config
+└── README.md                         # This file
+```
+
+## 🚀 Quick Start
+
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Supabase account
+
+### Installation
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up environment variables in `.env.local`
+4. Run development server: `npm run dev`
+
+### Environment Variables
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+## 📜 Available Scripts
+
+- `npm run dev` - Development server
+- `npm run build` - Production build
+- `npm run start` - Production server
+- `npm run lint` - Code linting
+
+## 🎯 Key Features
+
+### Blog System
+- Dynamic table of contents generation
+- Rich text content with TipTap editor
+- Comments and social sharing
+- Related posts recommendations
+
+### Dashboard
+- Blog post CRUD operations
+- Media file management
+- Comments moderation
+- Analytics view
+- Settings configuration
+
+### Authentication
+- Secure user login/signup
+- Protected routes
+- Session management
+
+## 🔧 Architecture
+
+The project follows a feature-based architecture with:
+- **Components**: Reusable UI elements
+- **Features**: Self-contained business logic modules
+- **Hooks**: Custom React hooks for data fetching and logic
+- **Pages**: Next.js App Router pages
+- **Utils**: Helper functions and utilities
+
+## 📱 Responsive & Accessible
+
+- Mobile-first responsive design
+- Dark/light mode support
+- Accessible components and navigation
+- Optimized for performance
+
+---
+
+Built with Next.js and modern web technologies.
