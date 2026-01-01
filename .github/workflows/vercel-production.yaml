@@ -12,7 +12,7 @@ concurrency:
 jobs:
   production:
     runs-on: ubuntu-latest
-    environment: vercel 
+    environment: vercel
 
     permissions:
       contents: read
@@ -29,6 +29,36 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
+
+      # 🔍 DEBUG ENV
+      - name: Debug Vercel environment variables
+        run: |
+          echo "Checking Vercel environment variables..."
+
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::error::VERCEL_TOKEN is EMPTY"
+            exit 1
+          else
+            echo "VERCEL_TOKEN is present"
+          fi
+
+          if [ -z "$VERCEL_PROJECT_ID" ]; then
+            echo "::error::VERCEL_PROJECT_ID is EMPTY"
+            exit 1
+          else
+            echo "VERCEL_PROJECT_ID is present"
+          fi
+
+          if [ -z "$VERCEL_ORG_ID" ]; then
+            echo "::error::VERCEL_ORG_ID is EMPTY"
+            exit 1
+          else
+            echo "VERCEL_ORG_ID is present"
+          fi
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
 
       - name: Deploy Production to Vercel
         run: npx vercel deploy --prod --yes --confirm
