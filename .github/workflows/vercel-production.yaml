@@ -58,6 +58,7 @@ jobs:
 
           echo "SUPABASE URL:" $NEXT_PUBLIC_SUPABASE_URL
           echo "SUPABASE ANON KEY:" $NEXT_PUBLIC_SUPABASE_ANON_KEY
+          
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
