@@ -6,8 +6,6 @@ A modern portfolio website with blog functionality, built using Next.js.
 
 This is a full-stack web application featuring:
 - **Blog System** with rich text editing capabilities
-- **User Authentication** and authorization
-- **Admin Dashboard** for content management
 - **Responsive Design** with dark mode support
 - **SEO Optimized** pages
 
@@ -16,7 +14,6 @@ This is a full-stack web application featuring:
 - **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS v4
 - **Backend**: Supabase (Auth, Database, Storage)
 - **Animations**: GSAP
-- **State Management**: React Query (tanstack)
 
 ## 📁 Project Structure
 
@@ -44,7 +41,6 @@ portfolio/
 │   ├── config/                       # Configuration files
 │   │   └── supabase.ts               # Supabase client setup
 │   ├── features/                     # Feature-based modules
-│   │   ├── auth/                     # Authentication logic
 │   │   ├── blog/                     # Blog functionality
 │   │   │   ├── components/           # Blog-specific components
 │   │   │   │   ├── BlogStaticReader.tsx
@@ -53,9 +49,6 @@ portfolio/
 │   │   │   │   └── blogreader.css
 │   │   │   └── hook/                 # Blog hooks (useBlog.ts)
 │   │   ├── comments/                 # Comments feature
-│   │   ├── dashboard/                # Dashboard feature
-│   │   ├── editor/                   # Rich text editor
-│   │   └── media/                    # Media management
 │   ├── hooks/                        # Custom React hooks
 ├── public/                           # Static assets (images, icons)
 ├── package.json                      # Dependencies and scripts
@@ -98,19 +91,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
 - Dynamic table of contents generation
 - Rich text content with TipTap editor
 - Comments and social sharing
-- Related posts recommendations
-
-### Dashboard
-- Blog post CRUD operations
-- Media file management
-- Comments moderation
-- Analytics view
-- Settings configuration
-
-### Authentication
-- Secure user login/signup
-- Protected routes
-- Session management
 
 ## 🔧 Architecture
 
