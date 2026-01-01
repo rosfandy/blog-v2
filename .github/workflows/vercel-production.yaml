@@ -12,7 +12,7 @@ concurrency:
 jobs:
   production:
     runs-on: ubuntu-latest
-    environment: production 
+    environment: vercel 
 
     permissions:
       contents: read
