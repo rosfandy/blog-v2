@@ -21,9 +21,9 @@ const CommentStaticReader = ({ blogId }: CommentsProps) => {
       </h3>
       <Giscus
         repo="rosfandy/blog-v2"
-        repoId="R_kgDOQx5Mnw"
+        repoId="R_kgDOQx7LIg"
         category="Comments"
-        categoryId="DIC_kwDOQx5Mn84C0cW9"
+        categoryId="DIC_kwDOQx7LIs4C0cj3"
         mapping="specific"
         term={blogId}
         strict="0"
