@@ -6,7 +6,7 @@ import Cursor from "../ui/Cursor";
 import { gsap } from 'gsap';
 import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Header } from "../fragments/Header";
+import { ThemeSwitch } from "../fragments/ThemeSwitch";
 import QueryProvider from "../provider/QueryProvider";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
@@ -67,7 +67,7 @@ export default function ClientLayout({
         <SplashScreen onFinish={handleFinish} />
       ) : (
           <div id="smooth-wrapper">
-            <Header />
+            <ThemeSwitch />
             <div className="fixed inset-0 overflow-hidden pointer-events-none z-[50] h-screen">
               <div className="absolute top-[-10%] left-[-5%] w-96 h-96 bg-primary/10 dark:bg-primary/5 rounded-full blur-3xl animate-float"></div>
               <div

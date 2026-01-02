@@ -141,7 +141,7 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
     }
 
     return (
-        <main className="flex-grow pt-12 md:pt-24 px-4 md:px-8 max-w-7xl mx-auto w-full">
+        <main className="flex-grow px-4 md:px-8 max-w-7xl mx-auto w-full">
             <div className="mb-8 md:mb-12">
                 <Link className="inline-flex items-center gap-2 text-primary dark:text-[#9f9cff] font-mono uppercase font-bold text-sm hover:-translate-x-1 transition-transform group" href="/blog">
                     <MdArrowBack className="group-hover:text-secondary transition-colors" />
