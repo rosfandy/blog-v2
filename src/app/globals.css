@@ -97,6 +97,24 @@ body {
   color: rgba(167, 139, 250, 0.3);
 }
 
+/* Multi-line title styling */
+.multi-line-title {
+  color: var(--secondary);
+}
+
+.dark .multi-line-title {
+  color: #eb4d4d;
+}
+
+/* First line: primary color */
+.multi-line-title::first-line {
+  color: var(--primary);
+}
+
+.dark .multi-line-title::first-line {
+  color: #9f9cff;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -109,6 +127,50 @@ html {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;             /* Chrome, Safari */
 }
+
+/* Custom Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 4px;
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(122, 118, 255, 0.3);
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(235, 77, 77, 0.3);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(122, 118, 255, 0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(235, 77, 77, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(122, 118, 255, 0.5) rgba(122, 118, 255, 0);
+}
+
 
 *,
 *::before,

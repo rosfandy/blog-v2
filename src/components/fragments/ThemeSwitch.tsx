@@ -2,7 +2,7 @@ import { useTheme } from "next-themes";
 import { LuMoon, LuSun } from "react-icons/lu";
 import { gsap } from 'gsap';
 
-export const Header = () => {
+export const ThemeSwitch = () => {
     const { theme, setTheme, systemTheme } = useTheme();
 
     const currentTheme = theme === "system" ? systemTheme : theme;
