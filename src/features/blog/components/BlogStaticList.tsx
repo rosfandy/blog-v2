@@ -44,7 +44,7 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
     }, [blogs]);
 
     return (
-        <section ref={sectionRef} className="mb-24 py-12 lg:px-48 md:px-24 px-8">
+        <section ref={sectionRef} className="mb-24 pb-12 lg:px-48 md:px-24 px-8">
             <div 
                 ref={headerRef} 
                 className="flex flex-col md:flex-row items-baseline gap-4 mb-8 border-b-2 border-secondary dark:border-red-400 pb-4"
