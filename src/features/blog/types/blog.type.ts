@@ -17,6 +17,8 @@ export interface Blog {
   created_at: string;
   updated_at?: string;
   tags?: string[];
+  date?: string;
+  thumbnail?: string;
   author_id?: string;
   profiles?: Profile;
 }

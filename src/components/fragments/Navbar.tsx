@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 import { gsap } from "gsap";
@@ -8,10 +8,13 @@ import { gsap } from "gsap";
 export const Navbar = () => {
     const pathname = usePathname();
     const navRef = useRef<HTMLElement>(null);
+    const [isAnimated, setIsAnimated] = useState(false);
 
     useEffect(() => {
-        if (navRef.current) {
-            const tl = gsap.timeline();
+        if (navRef.current && !isAnimated) {
+            const tl = gsap.timeline({
+                onComplete: () => setIsAnimated(true)
+            });
 
             tl.fromTo(navRef.current,
                 {
@@ -26,7 +29,7 @@ export const Navbar = () => {
                 }
             );
 
-                const navItems = navRef.current.querySelectorAll('.nav-item');
+            const navItems = navRef.current.querySelectorAll('.nav-item');
             if (navItems.length > 0) {
                 tl.fromTo(navItems,
                     {
@@ -44,7 +47,7 @@ export const Navbar = () => {
                 );
             }
         }
-    }, []);
+    }, [isAnimated]);
 
     const isActive = (path: string) => {
         if (path === "/" && pathname === "/") return true;
@@ -55,13 +58,16 @@ export const Navbar = () => {
     const navItems = [
         { href: "/", label: "Home" },
         { href: "/blog", label: "Blogs" },
-        // { href: "/project", label: "Projects" }
+        { href: "/work", label: "Works" },
     ];
 
     return (
-        <nav ref={navRef} className="fixed top-0 w-full z-50 px-4 py-4 md:px-8 md:py-6 flex justify-end items-start bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm">
-
-            <div className="flex gap-4 md:gap-6 text-sm md:text-base font-display text-primary dark:text-[#9f9cff] uppercase">
+        <nav 
+            ref={navRef} 
+            className="fixed top-0 w-full z-50 px-4 py-4 md:px-8 md:py-6 flex justify-center items-start bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-sm"
+            style={{ opacity: 0, transform: 'translateY(-100px)' }}
+        >
+            <div className="flex gap-4 md:gap-6 text-xl font-display text-primary dark:text-[#9f9cff] uppercase">
                 {navItems.map((item) => (
                     <Link
                         key={item.href}
@@ -78,4 +84,4 @@ export const Navbar = () => {
             </div>
         </nav>
     )
-}
+}      

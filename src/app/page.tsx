@@ -66,11 +66,23 @@ const HeroSection = () => {
     });
 
     /* ===============================
-       ORBIT ICON ANIMATION
+       ORBIT ICON ANIMATION - RESPONSIVE
     =============================== */
     const orbitDuration = 15;
-    const radiusX = 300;
-    const radiusY = 110;
+    
+    // Fungsi untuk mendapatkan radius berdasarkan ukuran layar
+    const getOrbitRadius = () => {
+      const width = window.innerWidth;
+      if (width < 768) {
+        return { radiusX: 150, radiusY: 55 };
+      } else if (width < 1024) {
+        return { radiusX: 200, radiusY: 75 };
+      } else {
+        return { radiusX: 300, radiusY: 110 };
+      }
+    };
+
+    let { radiusX, radiusY } = getOrbitRadius();
 
     const iconPairs = [
       { back: icon1BackRef, front: icon1FrontRef, startAngle: 0 },
@@ -79,10 +91,12 @@ const HeroSection = () => {
       { back: icon4BackRef, front: icon4FrontRef, startAngle: 270 },
     ];
 
+    const orbitAnimations: gsap.core.Tween[] = [];
+
     iconPairs.forEach(({ back, front, startAngle }) => {
       const startAngleRad = startAngle * (Math.PI / 180);
 
-      gsap.to({}, {
+      const anim = gsap.to({}, {
         duration: orbitDuration,
         repeat: -1,
         ease: "none",
@@ -134,7 +148,18 @@ const HeroSection = () => {
           }
         },
       });
+
+      orbitAnimations.push(anim);
     });
+
+    // Handle resize untuk update radius
+    const handleResize = () => {
+      const newRadius = getOrbitRadius();
+      radiusX = newRadius.radiusX;
+      radiusY = newRadius.radiusY;
+    };
+
+    window.addEventListener('resize', handleResize);
 
     /* ===============================
        ABOUT PIN + DELAYED SLIDE CONTENT
@@ -169,6 +194,8 @@ const HeroSection = () => {
     ScrollTrigger.refresh();
 
     return () => {
+      window.removeEventListener('resize', handleResize);
+      orbitAnimations.forEach(anim => anim.kill());
       ScrollTrigger.getAll().forEach(st => st.kill());
     };
   }, []);
@@ -185,23 +212,23 @@ const HeroSection = () => {
           <div ref={textRef} className="relative">
             {/* Icons BEHIND text */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none z-0">
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[220px] border-2 rounded-[50%] opacity-30 transition-colors duration-500 ${isDark ? 'border-[#a29dff]' : 'border-[#7a76ff]'
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:w-[600px] lg:h-[220px] md:w-[400px] md:h-[150px] w-[300px] h-[110px] border-2 rounded-[50%] opacity-30 transition-colors duration-500 ${isDark ? 'border-[#a29dff]' : 'border-[#7a76ff]'
                 }`} style={{ clipPath: 'inset(0 0 50% 0)' }}></div>
 
               <div ref={icon1BackRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuMousePointer2 className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuMousePointer2 className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon2BackRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuBinary className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuBinary className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon3BackRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuHand className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuHand className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon4BackRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuLightbulb className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuLightbulb className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
             </div>
 
@@ -221,23 +248,23 @@ const HeroSection = () => {
 
             {/* Icons IN FRONT of text */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full pointer-events-none z-20">
-              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[220px] border-2 rounded-[50%] opacity-30 transition-colors duration-500 ${isDark ? 'border-[#a29dff]' : 'border-[#7a76ff]'
+              <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 lg:w-[600px] lg:h-[220px] md:w-[400px] md:h-[150px] w-[300px] h-[110px] border-2 rounded-[50%] opacity-30 transition-colors duration-500 ${isDark ? 'border-[#a29dff]' : 'border-[#7a76ff]'
                 }`} style={{ clipPath: 'inset(50% 0 0 0)' }}></div>
 
               <div ref={icon1FrontRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuMousePointer2 className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuMousePointer2 className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon2FrontRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuBinary className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuBinary className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon3FrontRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuHand className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuHand className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
 
               <div ref={icon4FrontRef} className="orbit-icon absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <LuLightbulb className={`w-12 h-12 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
+                <LuLightbulb className={`lg:w-12 lg:h-12 md:w-10 md:h-10 w-8 h-8 transition-colors duration-500 ${isDark ? 'text-[#a29dff]' : 'text-[#7a76ff]'}`} strokeWidth={1.5} />
               </div>
             </div>
           </div>
@@ -292,8 +319,8 @@ const HeroSection = () => {
                        Browse my projects, read my documentation, or learn more about my background. And if you&apos;d like to connect, feel free to reach out or check out my resume.
                       </p>
                   </div>
-                  <div className="flex flex-wrap gap-4 pt-4">
-                    <Link href='http://tiny.cc/rosfandyCV' className="inline-flex items-center px-6 py-3 bg-text-light text-background-light dark:bg-white dark:text-black font-bold uppercase tracking-wider rounded-full hover:bg-primary hover:text-white transition-colors duration-300 cursor-pointer">
+                  <div className="flex flex-wrap gap-4 md:pt-4 md:pb-0 pb-8">
+                    <Link href='http://tiny.cc/rosfandyCV' className="inline-flex items-center px-6 py-3 text-white dark:text-black bg-black dark:bg-white font-bold uppercase tracking-wider rounded-full hover:bg-primary hover:text-white transition-colors duration-300 cursor-pointer">
                       Download CV
                     </Link>
                     <div onClick={handleRedirect} className="inline-flex items-center px-6 py-3 border-2 border-primary text-primary font-bold uppercase tracking-wider rounded-full hover:bg-primary hover:text-white transition-colors duration-300 cursor-pointer">

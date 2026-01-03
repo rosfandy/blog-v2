@@ -8,6 +8,7 @@ import { ScrollSmoother } from "gsap/ScrollSmoother";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ThemeSwitch } from "../fragments/ThemeSwitch";
 import QueryProvider from "../provider/QueryProvider";
+import { Footer } from "../fragments/Footer";
 
 gsap.registerPlugin(ScrollSmoother, ScrollTrigger);
 
