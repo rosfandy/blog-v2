@@ -1,7 +1,8 @@
 import { supabase } from "@/config/supabase";
-import { Blog } from "../types/blog.type";
+import { Blog } from "@/features/blog/types/blog.type";
 
-export async function getBlogs(): Promise<Blog[]> {
+
+export async function getProjects(): Promise<Blog[]> {
   const { data, error } = await supabase
     .from("blogs")
     .select(`
@@ -13,7 +14,7 @@ export async function getBlogs(): Promise<Blog[]> {
         avatar_url
       )
     `)
-    .eq("type", "blog")
+    .eq("type", "project")
     .order("created_at", { ascending: false });
 
   if (error) throw error;
@@ -29,7 +30,7 @@ export async function getBlogs(): Promise<Blog[]> {
   }));
 }
 
-export async function getBlog(id: string): Promise<Blog | null> {
+export async function getProjectById(id: string): Promise<Blog | null> {
   const { data, error } = await supabase
     .from("blogs")
     .select(`

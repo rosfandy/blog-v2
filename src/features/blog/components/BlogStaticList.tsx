@@ -10,12 +10,10 @@ import { slugify } from "@/utils/slugify";
 const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
     const sectionRef = useRef<HTMLElement>(null);
     const headerRef = useRef<HTMLDivElement>(null);
-
     useEffect(() => {
         if (blogs && sectionRef.current) {
             const tl = gsap.timeline();
 
-            // Animate header
             if (headerRef.current) {
                 tl.fromTo(headerRef.current,
                     { opacity: 0, y: -30 },
@@ -23,7 +21,6 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
                 );
             }
 
-            // Animate blog items
             const blogItems = sectionRef.current.querySelectorAll('.blog-item');
             if (blogItems.length > 0) {
                 tl.fromTo(blogItems,
@@ -47,7 +44,7 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
     }, [blogs]);
 
     return (
-        <section ref={sectionRef} className="mb-24 py-12 md:px-48 px-8">
+        <section ref={sectionRef} className="mb-24 py-12 lg:px-48 md:px-24 px-8">
             <div 
                 ref={headerRef} 
                 className="flex flex-col md:flex-row items-baseline gap-4 mb-8 border-b-2 border-secondary dark:border-red-400 pb-4"
@@ -65,10 +62,10 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
                         style={{ opacity: 0 }}
                     >
                         <div className="flex flex-col md:flex-row justify-between text-secondary dark:text-red-400 text-sm font-bold uppercase mb-2">
-                            <span className={`bg-secondary text-white dark:bg-red-400 dark:text-black px-2 py-0.5 transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} inline-block`}>
+                            <span className={`bg-black text-white w-fit dark:bg-white dark:text-black px-2 py-0.5 transform ${index % 2 === 0 ? '-rotate-1' : 'rotate-1'} inline-block`}>
                                 {blog.category || 'General'}
                             </span>
-                            <span>{new Date(blog.created_at).toLocaleDateString('en-US', {
+                            <span>{new Date(blog.date || blog.created_at).toLocaleDateString('en-US', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric'
@@ -82,8 +79,7 @@ const BlogStaticList = ({ blogs }: { blogs: Blog[] }) => {
                         </p>
                         <Link
                             href={`/blog/${slugify(blog.title)}-${blog.id}`}
-                            className="inline-block bg-black text-white px-6 py-2 rounded-full font-bold text-sm uppercase hover:bg-secondary transition-colors"
-                        >
+                            className="inline-flex items-center rounded-full justify-center px-6 py-2 bg-black text-white dark:bg-white dark:text-black font-heading font-bold uppercase tracking-wider rounded-pill hover:bg-primary hover:text-white dark:hover:bg-primary dark:hover:text-white transition-colors duration-300 text-sm">                        
                             Read more
                         </Link>
                     </div>

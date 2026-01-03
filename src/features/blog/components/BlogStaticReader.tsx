@@ -10,6 +10,7 @@ import { MdArrowBack, MdCalendarToday, MdTimer, MdSchool, MdPlayCircle, MdShare,
 import './blogreader.css';
 import CommentStaticReader from "@/features/comments/components/reader/CommentStaticReader";
 import { Blog } from "../types/blog.type";
+import { useRouter } from "next/navigation";
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin)
 
@@ -27,11 +28,67 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const pinRef = useRef<HTMLDivElement>(null);
     const articleRef = useRef<HTMLDivElement>(null);
+    const backLinkRef = useRef<HTMLDivElement>(null);
+    const headerRef = useRef<HTMLElement>(null);
+    const imageRef = useRef<HTMLDivElement>(null);
     const [processedContent, setProcessedContent] = useState<string>('');
+    const router = useRouter()
 
     const [tocItems, setTocItems] = useState<TocItem[]>([])
     const [activeId, setActiveId] = useState<string | null>(null)
 
+    // Initial page load animations
+    useEffect(() => {
+        const ctx = gsap.context(() => {
+            const tl = gsap.timeline();
+
+            // Animate back link
+            if (backLinkRef.current) {
+                tl.fromTo(backLinkRef.current,
+                    { opacity: 0, x: -20 },
+                    { opacity: 1, x: 0, duration: 0.5, ease: "power2.out" }
+                );
+            }
+
+            // Animate header
+            if (headerRef.current) {
+                tl.fromTo(headerRef.current,
+                    { opacity: 0, y: 30 },
+                    { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+                    "-=0.3"
+                );
+            }
+
+            // Animate featured image
+            if (imageRef.current) {
+                tl.fromTo(imageRef.current,
+                    { opacity: 0, scale: 0.95 },
+                    { opacity: 1, scale: 1, duration: 0.8, ease: "power2.out" },
+                    "-=0.4"
+                );
+            }
+
+            // Animate article content
+            if (articleRef.current) {
+                tl.fromTo(articleRef.current,
+                    { opacity: 0, y: 40 },
+                    { opacity: 1, y: 0, duration: 0.7, ease: "power2.out" },
+                    "-=0.5"
+                );
+            }
+
+            // Animate TOC
+            if (pinRef.current) {
+                tl.fromTo(pinRef.current,
+                    { opacity: 0, x: -30 },
+                    { opacity: 1, x: 0, duration: 0.6, ease: "power2.out" },
+                    "-=0.5"
+                );
+            }
+        });
+
+        return () => ctx.revert();
+    }, []);
 
     useEffect(() => {
         if (!blog.content) return
@@ -97,20 +154,27 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
         }
     }, [tocItems])
 
+    // Pin effect - hanya berjalan setelah content dan tocItems ready
     useEffect(() => {
-        if (!containerRef.current || !pinRef.current) return;
+        if (!containerRef.current || !pinRef.current || !articleRef.current) return;
+        if (!processedContent || tocItems.length === 0) return;
 
         const GAP = 28;
+        let scrollTriggerInstance: ScrollTrigger | null = null;
 
-        const ctx = gsap.context(() => {
-            ScrollTrigger.create({
+        const timeoutId = setTimeout(() => {
+            if (!containerRef.current || !pinRef.current || !articleRef.current) return;
+
+            scrollTriggerInstance = ScrollTrigger.create({
                 trigger: containerRef.current,
-                start: () =>
-                    `top+=${pinRef.current!.offsetTop - GAP} top+=${GAP}`,
-
-                end: () =>
-                    `+=${articleRef.current!.offsetHeight - pinRef.current!.offsetHeight}`,
-
+                start: () => {
+                    if (!pinRef.current) return 'top top';
+                    return `top+=${pinRef.current.offsetTop - GAP} top+=${GAP}`;
+                },
+                end: () => {
+                    if (!articleRef.current || !pinRef.current) return 'bottom bottom';
+                    return `+=${articleRef.current.offsetHeight - pinRef.current.offsetHeight}`;
+                },
                 pin: pinRef.current,
                 pinSpacing: false,
                 anticipatePin: 1,
@@ -118,12 +182,15 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
             });
 
             ScrollTrigger.refresh();
-        });
+        }, 100);
 
-
-        return () => ctx.revert();
-    }, []);
-
+        return () => {
+            clearTimeout(timeoutId);
+            if (scrollTriggerInstance) {
+                scrollTriggerInstance.kill();
+            }
+        };
+    }, [processedContent, tocItems]);
     const handleTocClick = (id: string) => (e: React.MouseEvent) => {
         e.preventDefault()
 
@@ -135,20 +202,24 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
             ease: 'power2.out',
             scrollTo: {
                 y: target,
-                offsetY: 96, 
+                offsetY: 96,
             },
         })
     }
 
     return (
         <main className="flex-grow px-4 md:px-8 max-w-7xl mx-auto w-full">
-            <div className="mb-8 md:mb-12">
-                <Link className="inline-flex items-center gap-2 text-primary dark:text-[#9f9cff] font-mono uppercase font-bold text-sm hover:-translate-x-1 transition-transform group" href="/blog">
+            <div ref={backLinkRef} className="mb-8 md:mb-12" style={{ opacity: 0 }}>
+                <button
+                    type="button"
+                    className="inline-flex items-center gap-2 text-primary dark:text-[#9f9cff] font-mono uppercase font-bold text-sm hover:-translate-x-1 transition-transform group" 
+                    onClick={()=>{router.back()}}
+                >
                     <MdArrowBack className="group-hover:text-secondary transition-colors" />
                     <span className="group-hover:text-secondary transition-colors">Back to Articles</span>
-                </Link>
+                </button>
             </div>
-            <header className="mb-12 md:mb-16 relative">
+            <header ref={headerRef} className="mb-12 md:mb-16 relative" style={{ opacity: 0 }}>
                 <div className="absolute -top-10 -right-10 text-secondary dark:text-secondary opacity-20 rotate-12 pointer-events-none">
                     <MdArticle className="text-[120px]" />
                 </div>
@@ -156,7 +227,7 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
                     <span className="bg-primary/10 dark:bg-primary/20 text-primary dark:text-[#9f9cff] px-3 py-1 rounded-full border border-primary/20 dark:border-primary/30">{blog.category || 'General'}</span>
                     <span className="flex items-center gap-1">
                         <MdCalendarToday className="text-base" />
-                        {new Date(blog.created_at).toLocaleDateString('en-US', {
+                        {new Date(blog.date || blog.created_at).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric'
@@ -190,18 +261,11 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
                     </div>
                 </div>
             </header>
-            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] mb-16 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/5 dark:shadow-none ring-1 ring-black/5 dark:ring-white/10">
+            <div ref={imageRef} className="relative w-full aspect-[16/9] md:aspect-[21/9] mb-16 rounded-[2rem] overflow-hidden group shadow-xl shadow-primary/5 dark:shadow-none ring-1 ring-black/5 dark:ring-white/10" style={{ opacity: 0 }}>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
-                <Image alt="Abstract digital art representing web development" fill className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC1jaA0lzZke-EWvySPpvBQNKpI8FUsL_D2dOYvIJu_8aXe6PUNbBVKdC-VrIaCqwJkl-tuE6BuPzK_3WXNfU5fhhm_JaWpCyr0cKkP2nAepn4m0_9wv_3RESVPLjWcTxb8gr8Q0y82p7VztSEaAcmg7fySyB-oL4woCoyWKQbZLTWGlmtIywTpq7acuUdAU1-MfpgzWfuDZ3Xzg_YC1Yk_xEl6nilm3uYCUFsbSQUGWhLGilUjwj8moDvNhTFCR69O8i3DuwVraaw" />
-                {/* <div className="absolute bottom-6 left-6 z-20">
-                    <button className="bg-white/10 backdrop-blur-md border border-white/20 text-white px-4 py-2 rounded-full text-xs font-mono font-bold uppercase hover:bg-white/20 transition-colors flex items-center gap-2">
-                        <MdPlayCircle className="text-base" />
-                        View Live Demo
-                    </button>
-                </div>
-                <div className="absolute bottom-6 right-6 z-20 bg-background-dark/80 backdrop-blur px-3 py-1 rounded text-xs font-mono text-gray-300">
-                    Image: Unsplash
-                </div> */}
+                <Image
+                    alt={blog.title} fill className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000 ease-out"
+                    src={blog.thumbnail || "https://lh3.googleusercontent.com/aida-public/AB6AXuC1jaA0lzZke-EWvySPpvBQNKpI8FUsL_D2dOYvIJu_8aXe6PUNbBVKdC-VrIaCqwJkl-tuE6BuPzK_3WXNfU5fhhm_JaWpCyr0cKkP2nAepn4m0_9wv_3RESVPLjWcTxb8gr8Q0y82p7VztSEaAcmg7fySyB-oL4woCoyWKQbZLTWGlmtIywTpq7acuUdAU1-MfpgzWfuDZ3Xzg_YC1Yk_xEl6nilm3uYCUFsbSQUGWhLGilUjwj8moDvNhTFCR69O8i3DuwVraaw"} />
             </div>
             <div
                 ref={containerRef}
@@ -210,10 +274,10 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
                 <div
                     ref={pinRef}
                     className="absolute w-1/5"
+                    style={{ opacity: 0 }}
                 >
                     <aside className="hidden lg:block self-start max-w-[200px]">
-                        <div
-                            className="space-y-8">
+                        <div className="space-y-8">
                             <div>
                                 <h4 className="font-display text-2xl uppercase text-secondary mb-6">Contents</h4>
                                 <nav className="flex flex-col gap-3 font-mono text-sm font-bold uppercase text-gray-500 dark:text-gray-400">
@@ -222,38 +286,30 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
                                             key={item.id}
                                             href={`#${item.id}`}
                                             onClick={handleTocClick(item.id)}
-                                            className={`
-        flex items-center gap-2 transition-colors group
-        ${item.level === 2 ? 'ml-4 text-xs' : ''}
-        ${item.level === 3 ? 'ml-8 text-[10px]' : ''}
-        ${activeId === item.id
-                                                    ? 'text-primary dark:text-[#9f9cff]'
+                                            className={`flex items-center gap-2 transition-colors group
+                                                ${item.level === 2 ? 'ml-4 text-xs' : ''}
+                                                ${item.level === 3 ? 'ml-8 text-[10px]' : ''}
+                                                ${activeId === item.id ? 'text-primary dark:text-[#9f9cff]'
                                                     : 'hover:text-primary dark:hover:text-[#9f9cff]'
                                                 }
-      `}
+                                            `}
                                         >
                                             <span
-                                                className={`
-          w-1.5 h-1.5 rounded-full transition-colors
-          ${activeId === item.id
-                                                        ? 'bg-primary'
-                                                        : 'bg-gray-300 group-hover:bg-primary'
-                                                    }
-        `}
+                                                className={`w-1.5 h-1.5 rounded-full transition-colors ${activeId === item.id
+                                                    ? 'bg-primary' : 'bg-gray-300 group-hover:bg-primary'
+                                                    }`}
                                             />
                                             {item.title}
                                         </a>
                                     ))}
                                 </nav>
-
                             </div>
                         </div>
                     </aside>
                 </div>
 
-
-                <div className="lg:ml-[20%] ml-0 lg:w-4/5 w-full  mt-16 lg:mt-24 relative z-10">
-                    <article ref={articleRef} id="article" className="min-h-[50vh] lg:col-span-8 prose dark:prose-invert prose-lg md:prose-xl max-w-none font-sans leading-relaxed">
+                <div className="lg:ml-[20%] ml-0 lg:w-4/5 w-full mt-16 lg:mt-24 relative z-10">
+                    <article ref={articleRef} id="article" className="min-h-[50vh] lg:col-span-8 prose dark:prose-invert prose-lg md:prose-xl max-w-none font-sans leading-relaxed" style={{ opacity: 0 }}>
                         <div dangerouslySetInnerHTML={{ __html: processedContent || blog.content || '' }} />
                     </article>
                     <div className="border-t border-b border-primary/10 dark:border-white/10 py-8 mb-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
@@ -282,12 +338,9 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
                             </button>
                         </div>
                     </div>
-
                 </div>
-                {/* <RelatedPosts currentBlogId={blog.id.toString()} /> */}
                 <CommentStaticReader blogId={blog.id.toString()} />
             </div>
-
         </main>
     );
 };
