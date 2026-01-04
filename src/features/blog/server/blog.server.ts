@@ -16,7 +16,7 @@ export async function getBlogs(): Promise<Blog[]> {
     .eq("type", "blog")
     .order("created_at", { ascending: false });
 
-  if (error) throw error;
+  if (error || !data) throw error || new Error("Failed to fetch blogs");
 
   return data.map((blog) => ({
     ...blog,
@@ -45,7 +45,8 @@ export async function getBlog(id: string): Promise<Blog | null> {
     .eq("id", id)
     .single();
 
-  if (error || !data) return null;
+  if (error) return null;
+  if (!data) return null;
 
   return {
     ...data,
