@@ -12,8 +12,6 @@ This is a full-stack web application featuring:
 ## 🛠️ Tech Stack
 
 - **Frontend**: Next.js 16, React 19, TypeScript, Tailwind CSS v4
-- **Backend**: Supabase (Auth, Database, Storage)
-- **Animations**: GSAP
 
 ## 📁 Project Structure
 
@@ -58,32 +56,6 @@ portfolio/
 ├── eslint.config.mjs                 # ESLint config
 └── README.md                         # This file
 ```
-
-## 🚀 Quick Start
-
-### Prerequisites
-- Node.js 18+
-- npm or yarn
-- Supabase account
-
-### Installation
-1. Clone the repository
-2. Install dependencies: `npm install`
-3. Set up environment variables in `.env.local`
-4. Run development server: `npm run dev`
-
-### Environment Variables
-```env
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-## 📜 Available Scripts
-
-- `npm run dev` - Development server
-- `npm run build` - Production build
-- `npm run start` - Production server
-- `npm run lint` - Code linting
 
 ## 🎯 Key Features
 
