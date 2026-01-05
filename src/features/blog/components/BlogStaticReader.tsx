@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
-import Link from 'next/link';
 import Image from 'next/image';
 import { MdArrowBack, MdCalendarToday, MdTimer, MdSchool, MdPlayCircle, MdShare, MdLink, MdFavorite, MdArrowForward, MdOpenInNew, MdArticle } from 'react-icons/md';
 import './blogreader.css';
