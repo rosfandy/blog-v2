@@ -22,8 +22,6 @@ const oswald = Oswald({
   subsets: ["latin"],
 });
 
-
-
 export const metadata: Metadata = {
   title: {
     default: "Rosfandy - Welcome, Home Sweet Home",
@@ -50,13 +48,6 @@ export const metadata: Metadata = {
       }
     ]
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "Rosfandy - Welcome, Home Sweet Home",
-    description: "Rosfandy's personal blog — programming and tech docs journey.",
-    creator: "@yourtwitterhandle",
-    images: [`${process.env.NEXT_PUBLIC_APP_URL}/og-default.jpg`]
-  },
   robots: {
     index: true,
     follow: true,
@@ -68,8 +59,12 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://rosfandy.me'),
+  alternates: {
+    canonical: '/',
+  },
   verification: {
-    google: "36TF-qR2DYcm_aZoCR2-EQCq9Bgsu0GlIahNTg3chF8",
+    google: "ckko56AJNEUdZrklBsS_2ByW2nTCtloz9viz8twbEKM",
   }
 };
 
