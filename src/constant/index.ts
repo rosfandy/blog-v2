@@ -14,7 +14,7 @@ const env = {
 
 if (typeof window !== 'undefined' || process.env.NODE_ENV === 'production') {
   const requiredEnvVars = [
-    'NEXT_PUBLIC_BASE_URL',
+    'NEXT_PUBLIC_APP_URL',
     'NEXT_PUBLIC_SUPABASE_URL',
     'NEXT_PUBLIC_SUPABASE_ANON_KEY'
   ] as const;
