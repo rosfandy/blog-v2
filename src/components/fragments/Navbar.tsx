@@ -58,7 +58,7 @@ export const Navbar = () => {
     const navItems = [
         { href: "/", label: "Home" },
         { href: "/blog", label: "Blogs" },
-        { href: "/work", label: "Works" },
+        { href: "/project", label: "Projects" },
     ];
 
     return (

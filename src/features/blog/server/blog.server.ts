@@ -1,59 +1,32 @@
-import { supabase } from "@/config/supabase";
 import { Blog } from "../types/blog.type";
+import path from "node:path";
+import { readMarkdownDirectory } from "@/features/content/markdown-content";
 
 export async function getBlogs(): Promise<Blog[]> {
-  const { data, error } = await supabase
-    .from("blogs")
-    .select(`
-     *,
-      profiles (
-        id,
-        username,
-        full_name,
-        avatar_url
-      )
-    `)
-    .eq("type", "blog")
-    .order("created_at", { ascending: false });
+  const blogDir = path.join(process.cwd(), "src", "notes", "app", "blog");
+  const markdownBlogs = await readMarkdownDirectory(blogDir);
 
-  if (error || !data) throw error || new Error("Failed to fetch blogs");
-
-  return data.map((blog) => ({
-    ...blog,
-    tags: blog.tags
-      ? typeof blog.tags === "string"
-        ? JSON.parse(blog.tags)
-        : blog.tags
-      : [],
-    profiles: blog.profiles?.[0],
+  return markdownBlogs.map((item, index) => ({
+    id: index + 1,
+    title: item.title,
+    description: item.frontmatter.description || "No description available.",
+    content: item.body,
+    status: "published",
+    category: item.frontmatter.category || "blog",
+    created_at: item.frontmatter.date || new Date().toISOString(),
+    updated_at: item.frontmatter.date || new Date().toISOString(),
+    tags: item.frontmatter.tags || [],
+    date: item.frontmatter.date,
+    thumbnail: item.frontmatter.thumbnail,
+    profiles: {
+      id: "local-author",
+      username: "bagusrosfandy",
+      full_name: "Bagus Rosfandy",
+    },
   }));
 }
 
 export async function getBlog(id: string): Promise<Blog | null> {
-  const { data, error } = await supabase
-    .from("blogs")
-    .select(`
-      *,
-      profiles (
-        id,
-        username,
-        full_name,
-        avatar_url,
-        bio
-      )
-    `)
-    .eq("id", id)
-    .single();
-
-  if (error) return null;
-  if (!data) return null;
-
-  return {
-    ...data,
-    tags: data.tags
-      ? typeof data.tags === "string"
-        ? JSON.parse(data.tags)
-        : data.tags
-      : [],
-  };
+  const blogs = await getBlogs();
+  return blogs.find((blog) => blog.id.toString() === id) || null;
 }

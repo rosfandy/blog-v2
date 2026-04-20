@@ -28,7 +28,7 @@ export async function generateMetadata({
     : [];
 
   const ogImage = `${APP_URL}/og-default.jpg`;
-  const canonicalUrl = `${APP_URL}/work/${id}`;
+  const canonicalUrl = `${APP_URL}/project/${id}`;
 
   return {
     title: project.title,

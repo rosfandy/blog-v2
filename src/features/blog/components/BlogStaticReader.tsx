@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
+import MarkdownIt from 'markdown-it'
 import Image from 'next/image';
 import { MdArrowBack, MdCalendarToday, MdTimer, MdSchool, MdPlayCircle, MdShare, MdLink, MdFavorite, MdArrowForward, MdOpenInNew, MdArticle } from 'react-icons/md';
 import './blogreader.css';
@@ -21,6 +22,43 @@ type TocItem = {
     id: string
     title: string
     level: number
+}
+
+const markdown = new MarkdownIt({
+    html: true,
+    linkify: true,
+    typographer: true,
+    breaks: true,
+})
+
+const defaultNormalizeLink = markdown.normalizeLink.bind(markdown)
+
+markdown.normalizeLink = (url: string) => {
+    const trimmed = url.trim()
+
+    if (/^www\./i.test(trimmed)) {
+        return defaultNormalizeLink(`https://${trimmed}`)
+    }
+
+    if (/^https?:\/(?!\/)/i.test(trimmed)) {
+        return defaultNormalizeLink(trimmed.replace(/^https?:\//i, (m) => `${m}/`))
+    }
+
+    return defaultNormalizeLink(trimmed)
+}
+
+function renderMarkdownContent(content: string): string {
+    return markdown.render(content)
+}
+
+function isHtmlContent(content: string): boolean {
+    return /<([a-z][\w-]*)(\s|>)/i.test(content)
+}
+
+function toHtmlContent(content: string): string {
+    if (!content) return ''
+    if (isHtmlContent(content)) return content
+    return renderMarkdownContent(content)
 }
 
 const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
@@ -90,10 +128,16 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
     }, []);
 
     useEffect(() => {
-        if (!blog.content) return
+        if (!blog.content) {
+            setTocItems([])
+            setProcessedContent('')
+            return
+        }
+
+        const renderedContent = toHtmlContent(blog.content)
 
         const parser = new DOMParser()
-        const doc = parser.parseFromString(blog.content, 'text/html')
+        const doc = parser.parseFromString(renderedContent, 'text/html')
 
         const headings = doc.querySelectorAll('h1, h2, h3')
         const items: TocItem[] = []
@@ -309,7 +353,7 @@ const BlogStaticReader = ({ blog }: BlogStaticReaderProps) => {
 
                 <div className="lg:ml-[20%] ml-0 lg:w-4/5 w-full mt-16 lg:mt-24 relative z-10">
                     <article ref={articleRef} id="article" className="min-h-[50vh] lg:col-span-8 prose dark:prose-invert prose-lg md:prose-xl max-w-none font-sans leading-relaxed" style={{ opacity: 0 }}>
-                        <div dangerouslySetInnerHTML={{ __html: processedContent || blog.content || '' }} />
+                        <div dangerouslySetInnerHTML={{ __html: processedContent || toHtmlContent(blog.content || '') }} />
                     </article>
                     <div className="border-t border-b border-primary/10 dark:border-white/10 py-8 mb-16 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div className="flex flex-wrap gap-2 items-center">

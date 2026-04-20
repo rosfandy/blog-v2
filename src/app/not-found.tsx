@@ -45,7 +45,7 @@ export default function NotFound() {
                 <div className=" pt-16 border-t border-primary/10 dark:border-white/5 w-full">
                     <p className="font-mono text-xs uppercase font-bold text-gray-400 mb-6 tracking-wide">Or check out these popular pages:</p>
                     <div className="flex flex-wrap justify-center gap-4 md:gap-8">
-                        <Link className="group flex items-center gap-2 text-primary dark:text-[#9f9cff] font-display uppercase text-xl md:text-2xl hover:text-secondary transition-colors" href="/work">
+                        <Link className="group flex items-center gap-2 text-primary dark:text-[#9f9cff] font-display uppercase text-xl md:text-2xl hover:text-secondary transition-colors" href="/project">
                             <span className="w-8 h-8 rounded-full border border-current flex items-center justify-center group-hover:bg-secondary group-hover:text-white group-hover:border-secondary transition-all">
                                 <MdFolder className="text-sm" />
                             </span>

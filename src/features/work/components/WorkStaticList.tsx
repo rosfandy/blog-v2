@@ -64,8 +64,13 @@ const WorkStaticList = ({ projects }: { projects: Project[] }) => {
     }, []);
 
     const handleProjectClick = (projectTitle: string, projectId: string) => {
-        router.push(`/work/${slugify(projectTitle)}-${projectId}`);
+        router.push(`/project/${slugify(projectTitle)}-${projectId}`);
     };
+
+    const sortedProjects = [...projects].sort((a, b) => {
+        if (a.year !== b.year) return b.year - a.year;
+        return a.title.localeCompare(b.title);
+    });
 
     return (
         <main ref={mainRef} className="flex-grow w-full max-w-7xl mx-auto px-6 py-12 md:py-20">
@@ -75,8 +80,8 @@ const WorkStaticList = ({ projects }: { projects: Project[] }) => {
                 style={{ opacity: 0 }}
             >
                 <h1 className="font-display text-[15vw] md:text-[12vw] leading-[0.8] text-primary select-none mix-blend-multiply dark:mix-blend-screen opacity-90">
-                    JOURNEY<br />
-                    <span className="text-accent ml-0 md:ml-24 block md:inline">WORK</span>
+                    LATEST<br />
+                    <span className="text-accent ml-0 md:ml-24 block md:inline">PROJECT</span>
                 </h1>
                 <div className="absolute top-0 right-10 text-primary hidden md:block animate-bounce" >
                     <MdSmartToy className="text-6xl transform rotate-12" />
@@ -86,8 +91,8 @@ const WorkStaticList = ({ projects }: { projects: Project[] }) => {
                 </div>
             </header>
             <div className="flex flex-col gap-16 md:gap-24">
-                {projects.map((project, index) => {
-                    const projectUrl = `/work/${slugify(project.title)}-${project.id}`;
+                {sortedProjects.map((project, index) => {
+                    const projectUrl = `/project/${slugify(project.title)}-${project.id}`;
                     
                     return (
                         <article
