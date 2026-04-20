@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "project/JalanKerja.md",
+                "file": "project/SupaGo.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "JalanKerja"
+              "title": "SupaGo"
             }
           }
         ]
@@ -182,10 +182,10 @@
   },
   "active": "62e8cf6d0b1e9804",
   "lastOpenFiles": [
+    "project/JalanKerja.md",
     "project/LibriGo.md",
     "project/SupaGo.md",
     "project/Lotion - Notion Clone.md",
-    "project/JalanKerja.md",
     "blog/Hocuspocus.md",
     "2026-04-13.md",
     "project/Movielink.md",

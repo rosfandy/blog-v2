@@ -131,7 +131,7 @@ const WorkStaticList = ({ projects }: { projects: Project[] }) => {
                                     </div>
                                 </div>
                                 <div className="md:col-span-4 flex flex-col justify-between">
-                                    <img src={project.thumbnail} alt={project.title} className="h-auto md:w-[400px] rounded-xl w-full" />
+                                    <img src={project.thumbnail} alt={project.title} className="max-h-[200px] md:w-[400px] rounded-xl w-full" />
                                     <div className="mt-6">
                                         <h4 className="font-heading font-bold uppercase text-sm mb-3 text-gray-400">Tech Stack</h4>
                                         <div className="flex flex-wrap gap-2">
