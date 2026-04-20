@@ -3,7 +3,7 @@ tags:
   - golang
   - nextjs
 date: 2026-04-13
-description: Management Internal App for Company
+description: Management Internal App for PT Smartlink
 duration: "3"
 status: published
 thumbnail: https://ik.imagekit.io/mesifer/blog/jk.png
