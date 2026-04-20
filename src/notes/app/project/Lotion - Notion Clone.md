@@ -35,7 +35,7 @@ This project is a modern **WYSIWYG** rich text editor for React, based on Tiptap
 # Preview
 ---
 
-<div style="display: flex; gap: 10px;">
+<div style="display: flex; gap: 10px; overflow-x: auto;">
   <img src="https://ik.imagekit.io/mesifer/blog/tr:w-300,h-600/lotion.png" style="height: 300px;">
   <img src="https://ik.imagekit.io/mesifer/blog/lotion-2.png" style="height: 300px; width: auto;">
 </div>
