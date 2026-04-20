@@ -62,8 +62,8 @@ describe('WorkStaticList', () => {
   it('should display work section title', () => {
     render(<WorkStaticList projects={mockProjects} />);
 
-    expect(screen.getByText('JOURNEY')).toBeInTheDocument();
-    expect(screen.getByText('WORK')).toBeInTheDocument();
+    expect(screen.getByText('LATEST')).toBeInTheDocument();
+    expect(screen.getByText('PROJECT')).toBeInTheDocument();
   });
 
   it('should render all projects', () => {
@@ -127,8 +127,8 @@ describe('WorkStaticList', () => {
   it('should handle empty projects list', () => {
     render(<WorkStaticList projects={[]} />);
 
-    expect(screen.getByText('JOURNEY')).toBeInTheDocument();
-    expect(screen.getByText('WORK')).toBeInTheDocument();
+    expect(screen.getByText('LATEST')).toBeInTheDocument();
+    expect(screen.getByText('PROJECT')).toBeInTheDocument();
 
     const visitButtons = screen.queryAllByText('Visit');
     expect(visitButtons.length).toBe(0);

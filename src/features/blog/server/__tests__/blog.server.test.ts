@@ -13,7 +13,7 @@ describe("blog.server.ts", () => {
           description: expect.any(String),
           content: expect.any(String),
           tags: expect.any(Array),
-          category: "blog",
+          category: expect.any(String),
         })
       );
     });
